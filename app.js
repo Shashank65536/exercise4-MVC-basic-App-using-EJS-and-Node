@@ -1,6 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
-
+const storyRoutes = require('./routes/storyRoutes');
 
 const app = express();
 
@@ -21,6 +21,7 @@ app.get('/', (req, res) => {
     res.render('index');
 })
 
+app.use('/stories', storyRoutes);
 
 //server
 app.listen(port,host,()=>{
