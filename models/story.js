@@ -1,5 +1,6 @@
 
 const {DateTime} = require("luxon");
+const {v4: uuidv4} = require('uuid');
 const stories = [
     {
         id: '1',
@@ -33,3 +34,24 @@ exports.findById = (id) =>{
     return stories.find(story => story.id === id);
 }
 
+exports.save = (story) => {
+    
+    let uuid = uuidv4();
+    story["id"] = uuid;
+    story["createdAt"] =  DateTime.now().toLocaleString(DateTime.DATETIME_SHORT);
+    stories.push(story);
+    console.log("New story added");
+    stories.push(story);
+}
+
+exports.updateById = (id, newStory) => {
+    let story = stories.find(story => story.id === id);
+
+    if(story){
+        story.title = newStory.title;
+        story.content = newStory.content;
+        return true;
+    }else{
+        return false;
+    }
+};

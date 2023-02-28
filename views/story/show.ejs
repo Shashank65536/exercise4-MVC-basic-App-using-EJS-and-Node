@@ -7,6 +7,10 @@
     <div id = "story">
         <p><%= story.content %></p>
     </div>
+
+    <form>
+        <button type = "submit" formmethod="GET" formaction="/stories/<%=story.id%>/edit">Edit</button>
+    </form>
 </div>
 
 <%- include('../partials/footer.ejs')%>

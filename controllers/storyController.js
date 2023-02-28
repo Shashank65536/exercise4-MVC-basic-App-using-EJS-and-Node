@@ -12,11 +12,14 @@ exports.index = (req, res) =>{
 };
 
 exports.new  = (req, res) => {
-    res.send ('Send the new form.');
+    res.render('./story/new');
 };
 
 exports.create =  (req, res) =>{
-    res.send ('create a new story.');
+    // res.send ('create a new story.');
+    let story = req.body;
+    model.save(story);
+    res.redirect('/stories');
 };
 
 exports.show =  (req, res) =>{
@@ -24,17 +27,36 @@ exports.show =  (req, res) =>{
     let story = model.findById(id);
     if (story){
         res.render('./story/show',{story})
+    }else{
+        res.status(404).send("Cannot find the story");
     }
-    res.status(404).send("Cannot find the story");
+    
     
 };
 
 exports.edit = (req, res) =>{
-    res.send ('Send edit form .');
+    // res.send ('Send edit form .');
+    let id = req.params.id;
+    let story = model.findById(id);
+    if (story){
+        res.render('./story/edit',{story})
+    }else{
+        res.status(404).send("Cannot find the story");
+    }
+    
 };
 
 exports.update =  (req, res) =>{
-    res.send ('update the story with id');
+    // res.send ('update the story with id'); 
+    let story = req.body;
+    // console.log(story);
+    let id = req.params.id;
+
+    if(model.updateById(id,story)){
+        res.redirect('/stories/' + id);
+    }else{
+        res.status(404).send("Cannot find the story with id " + id);
+    }
 };
 
 exports.delete = (req, res) =>{
