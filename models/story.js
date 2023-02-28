@@ -41,7 +41,7 @@ exports.save = (story) => {
     story["createdAt"] =  DateTime.now().toLocaleString(DateTime.DATETIME_SHORT);
     stories.push(story);
     console.log("New story added");
-    stories.push(story);
+    // stories.push(story);
 }
 
 exports.updateById = (id, newStory) => {
@@ -55,3 +55,13 @@ exports.updateById = (id, newStory) => {
         return false;
     }
 };
+
+exports.deleteById = (id) => {
+    let index = stories.findIndex(story=> story.id === id);
+    if (index != -1){
+        stories.splice(index,1);
+        return true;
+    }else{
+        return false;
+    }
+}

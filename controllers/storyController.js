@@ -22,31 +22,35 @@ exports.create =  (req, res) =>{
     res.redirect('/stories');
 };
 
-exports.show =  (req, res) =>{
+exports.show =  (req, res, next) =>{
     let id = req.params.id;
     let story = model.findById(id);
     if (story){
         res.render('./story/show',{story})
     }else{
-        res.status(404).send("Cannot find the story");
+        let err = new Error('Cannot find a story with id  ' + id);
+        err.status = 404;
+        next(err);
     }
     
     
 };
 
-exports.edit = (req, res) =>{
+exports.edit = (req, res, next) =>{
     // res.send ('Send edit form .');
     let id = req.params.id;
     let story = model.findById(id);
     if (story){
         res.render('./story/edit',{story})
     }else{
-        res.status(404).send("Cannot find the story");
+        let err = new Error('Cannot find a story with id  ' + id);
+        err.status = 404;
+        next(err);
     }
     
 };
 
-exports.update =  (req, res) =>{
+exports.update =  (req, res, next) =>{
     // res.send ('update the story with id'); 
     let story = req.body;
     // console.log(story);
@@ -55,10 +59,21 @@ exports.update =  (req, res) =>{
     if(model.updateById(id,story)){
         res.redirect('/stories/' + id);
     }else{
-        res.status(404).send("Cannot find the story with id " + id);
+        let err = new Error('Cannot find a story with id  ' + id);
+        err.status = 404;
+        next(err);
     }
 };
 
-exports.delete = (req, res) =>{
-    res.send ('delete the story');
+exports.delete = (req, res, next) =>{
+    // res.send ('delete the story');
+    let id = req.params.id;
+
+    if (model.deleteById(id)){
+        res.redirect('/stories');
+    }else{
+        let err = new Error('Cannot find a story with id  ' + id);
+        err.status = 404;
+        next(err);
+    }
 };

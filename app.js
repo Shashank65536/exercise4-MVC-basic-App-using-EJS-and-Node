@@ -17,12 +17,35 @@ app.use(express.urlencoded({extended: true}));
 app.use(morgan('tiny'));
 app.use(methodOverride('_method'));
 
+
 //routes
 app.get('/', (req, res) => {
     res.render('index');
 })
 
 app.use('/stories', storyRoutes);
+
+app.use((req, res, next) =>{
+    let err = new Error('The server cannot locate ' + req.url);
+    err.status = 404;
+    next(err);
+})
+
+app.use((err,req,res, next) => {
+
+    console.log("I am in the error ka app.use");
+    // console.log(err.stack);
+    if(!err.status){
+        err.status = 500;
+        err.message = ("Internal Server Error");
+
+    }
+    res.status = (err.status);
+    console.log("Status iss",res.status);
+    console.log(err);
+    
+    res.render('error', {error:err});
+});
 
 //server
 app.listen(port,host,()=>{
