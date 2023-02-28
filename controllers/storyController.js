@@ -1,8 +1,14 @@
 const express = require('express');
-
+const model = require('../models/story');
 
 exports.index = (req, res) =>{
-    res.send ('Display all the stories.');
+    // res.send ('Display all the stories.');
+    let stories = model.find();
+    // console.log(stories);
+    stories.forEach((obj) => {
+        console.log(obj.title);
+      });
+    res.render('./story/index',{stories});
 };
 
 exports.new  = (req, res) => {
@@ -14,7 +20,13 @@ exports.create =  (req, res) =>{
 };
 
 exports.show =  (req, res) =>{
-    res.send ('Send the story with id.' + req.params.id);
+    let id = req.params.id;
+    let story = model.findById(id);
+    if (story){
+        res.render('./story/show',{story})
+    }
+    res.status(404).send("Cannot find the story");
+    
 };
 
 exports.edit = (req, res) =>{
